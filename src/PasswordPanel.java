@@ -9,9 +9,9 @@ public class PasswordPanel extends JPanel {
 	private JLabel keyLabel;
 	private JPasswordField keyField;
 	
-	public PasswordPanel() {
+	public PasswordPanel(String label) {
 		
-		keyLabel = new JLabel("Encryption Key");
+		keyLabel = new JLabel(label);
 		keyField = new JPasswordField(30);
 		
 		setLayout(new FlowLayout());

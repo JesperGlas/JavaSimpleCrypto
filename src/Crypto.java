@@ -1,45 +1,60 @@
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 public class Crypto {
 	
-	private static int shift = 3;
+	private static SecretKeySpec secretKey;
+	private static byte[] key;
 
-	public static byte[] encrypt(byte[] data, byte[] key) {
-		byte[] encData = data; // Variable to hold encrypted text.
-		int keyIndex = 0; // Default key index
-		key = key != null ? key : new byte[8]; // If no key is provided an empty byte is used as key
-		
-		// Loop through each byte of the data
-		for (int i = 0; i < data.length; i++) {
-			keyIndex = i % key.length; // Modulo of the current index and the length of the key always gives a valid index in key.
-			int keyValue = key[keyIndex] % 2; // Modulo of the value at key index in key determines shift direction.
-			
-			if (keyValue == 1) {
-				// If the value is not even the shift will be positive. 
-				encData[i] = (byte) ((data[i] + shift) < 128 ? data[i] + shift : data[i]);
-			} else {
-				encData[i] = (byte) ((data[i] - shift) >= 0 ? data[i] - shift : data[i]);
-			}
-		}
-		
-		return encData;
+	public static String encrypt(String data, String password) throws Exception {
+        try
+        {
+            genSecretKeySpec(password);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            return Base64.getEncoder().encodeToString(cipher.doFinal(data.getBytes("UTF-8")));
+        } 
+        catch (Exception e) 
+        {
+            System.out.println("Error while encrypting: " + e.toString());
+            return e.toString();
+        }
 	}
-	
-	public static byte[] decrypt(byte[] data, byte[] key) {
-		byte[] decData = data;
-		int keyIndex = 0;
-		key = key != null ? key : new byte[8];
-		
-		for (int i = 0; i < data.length; i++) {
-			keyIndex = i % key.length;
-			int keyValue = key[keyIndex] % 2;
-			
-			if (keyValue == 0) {
-				decData[i] = (byte) ((data[i] + shift) < 128 ? data[i] + shift : data[i]);
-			} else {
-				decData[i] = (byte) ((data[i] - shift) >= 0 ? data[i] - shift : data[i]);
-			}
+
+	public static String decrypt(String data, String password) throws Exception {
+        try
+        {
+            genSecretKeySpec(password);
+            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(data)));
+        } 
+        catch (Exception e) 
+        {
+            System.out.println("Error while decrypting: " + e.toString());
+            return e.toString();
+        }
+	}
+
+	private static void genSecretKeySpec(String password) {
+		MessageDigest sha = null;
+		secretKey = null;
+		try {
+			key = password.getBytes("UTF-8");
+			sha = MessageDigest.getInstance("SHA-1");
+			key = sha.digest(key);
+			key = Arrays.copyOf(key, 16);
+			secretKey = new SecretKeySpec(key, "AES");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-		
-		return decData;
 	}
 }

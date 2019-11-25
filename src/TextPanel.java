@@ -4,6 +4,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 
 public class TextPanel extends JPanel {
 	
@@ -15,7 +16,11 @@ public class TextPanel extends JPanel {
 		titleLabel = new JLabel(label);
 		textArea = new JTextArea();
 		
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+		
 		setLayout(new BorderLayout());
+		setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		add(titleLabel, BorderLayout.NORTH);
 		add(new JScrollPane(textArea), BorderLayout.CENTER);
