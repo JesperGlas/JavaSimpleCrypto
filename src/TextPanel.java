@@ -15,13 +15,14 @@ public class TextPanel extends JPanel {
 	private JLabel titleLabel;
 	private JTextArea textArea;
 	
-	public TextPanel(String label) {
+	public TextPanel(String label, Boolean editable) {
 		
 		titleLabel = new JLabel(label);
 		textArea = new JTextArea();
 		
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
+        textArea.setEditable(editable);
 		
 		setLayout(new BorderLayout());
 		setBorder(new EmptyBorder(5, 5, 5, 5));

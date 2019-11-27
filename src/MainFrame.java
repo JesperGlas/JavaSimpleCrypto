@@ -10,6 +10,10 @@ public class MainFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 5063276219420379402L;
+	
+	private boolean readOnly = false;
+	private boolean readAndWrite = true;
+	
 	// Default dimensions of the window
 	private int frameWidth = 600;
 	private int frameHeight = 500;
@@ -32,8 +36,8 @@ public class MainFrame extends JFrame {
 		setLayout(new GridBagLayout());
 
 		toolbar = new Toolbar();
-		inputPanel = new TextPanel("Input");
-		outputPanel = new TextPanel("Output");
+		inputPanel = new TextPanel("Input", readAndWrite);
+		outputPanel = new TextPanel("Output", readOnly);
 		key1Panel = new PasswordPanel("Key");
 
 		toolbar.setButtonListener(new ButtonListener() {

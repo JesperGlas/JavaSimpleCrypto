@@ -25,13 +25,13 @@ public class Crypto {
 	}
 
 	private static SecretKey genSecretKeySpec(String password) {
-		MessageDigest sha = null;
+		MessageDigest shaMD = null;
 		SecretKey secretKey = null;
 		byte[] key;
 		try {
 			key = password.getBytes("UTF-8");
-			sha = MessageDigest.getInstance("SHA-1");
-			key = sha.digest(key);
+			shaMD = MessageDigest.getInstance("SHA-512");
+			key = shaMD.digest(key);
 			key = Arrays.copyOf(key, 16);
 			secretKey = new SecretKeySpec(key, "AES");
 		} catch (NoSuchAlgorithmException e) {
