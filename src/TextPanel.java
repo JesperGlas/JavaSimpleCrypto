@@ -8,6 +8,10 @@ import javax.swing.border.EmptyBorder;
 
 public class TextPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4627588441372461307L;
 	private JLabel titleLabel;
 	private JTextArea textArea;
 	

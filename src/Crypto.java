@@ -5,46 +5,29 @@ import java.util.Arrays;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 public class Crypto {
-	
-	private static SecretKeySpec secretKey;
-	private static byte[] key;
 
-	public static String encrypt(String data, String password) throws Exception {
-        try
-        {
-            genSecretKeySpec(password);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            return Base64.getEncoder().encodeToString(cipher.doFinal(data.getBytes("UTF-8")));
-        } 
-        catch (Exception e) 
-        {
-            System.out.println("Error while encrypting: " + e.toString());
-            return e.toString();
-        }
+	public static byte[] encrypt(byte[] data, String password) throws Exception {
+		SecretKey secretKey = genSecretKeySpec(password);
+		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+		cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+		return cipher.doFinal(data);
 	}
 
-	public static String decrypt(String data, String password) throws Exception {
-        try
-        {
-            genSecretKeySpec(password);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
-            return new String(cipher.doFinal(Base64.getDecoder().decode(data)));
-        } 
-        catch (Exception e) 
-        {
-            System.out.println("Error while decrypting: " + e.toString());
-            return e.toString();
-        }
+	public static byte[] decrypt(byte[] data, String password) throws Exception {
+		SecretKey secretKey = genSecretKeySpec(password);
+		Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+		cipher.init(Cipher.DECRYPT_MODE, secretKey);
+		return cipher.doFinal(Base64.getDecoder().decode(data));
 	}
 
-	private static void genSecretKeySpec(String password) {
+	private static SecretKey genSecretKeySpec(String password) {
 		MessageDigest sha = null;
-		secretKey = null;
+		SecretKey secretKey = null;
+		byte[] key;
 		try {
 			key = password.getBytes("UTF-8");
 			sha = MessageDigest.getInstance("SHA-1");
@@ -55,6 +38,25 @@ public class Crypto {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
+		}
+		return secretKey;
+	}
+
+	public static String encryptString(String data, String password) {
+		try {
+			return new String(Base64.getEncoder().encodeToString(encrypt(data.getBytes("UTF-8"), password)));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Error! Something went wrong with the encryption.";
+		}
+	}
+
+	public static String decryptString(String data, String password) {
+		try {
+			return new String(decrypt(data.getBytes("UTF-8"), password), "UTF-8");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "Error! Something went wrong with the Decryption. Make sure to use the right key.";
 		}
 	}
 }

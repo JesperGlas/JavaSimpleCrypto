@@ -6,6 +6,10 @@ import javax.swing.JPasswordField;
 
 public class PasswordPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3284759601422914964L;
 	private JLabel keyLabel;
 	private JPasswordField keyField;
 	

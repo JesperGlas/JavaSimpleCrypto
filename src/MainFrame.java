@@ -2,9 +2,14 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
 
 public class MainFrame extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5063276219420379402L;
 	// Default dimensions of the window
 	private int frameWidth = 600;
 	private int frameHeight = 500;
@@ -14,10 +19,14 @@ public class MainFrame extends JFrame {
 	private TextPanel outputPanel;
 	private PasswordPanel key1Panel;
 
-	private int encryptionLoops = 5;
-
 	public MainFrame() {
 		super("JavaEncrypt");
+		
+		try { 
+		    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
 
 		// Set the main windows layout to BorderLayout
 		setLayout(new GridBagLayout());
@@ -40,7 +49,7 @@ public class MainFrame extends JFrame {
 				if (action == "encrypt") {
 					String encrypted;
 					try {
-						encrypted = Crypto.encrypt(inputText, password);
+						encrypted = Crypto.encryptString(inputText, password);
 					} catch (Exception e) {
 						encrypted = "";
 						e.printStackTrace();
@@ -48,8 +57,8 @@ public class MainFrame extends JFrame {
 					outputText = encrypted;
 				} else if (action == "decrypt") {
 					String decrypted;
-					try {
-						decrypted = Crypto.decrypt(inputText, password);
+					try {	
+						decrypted = Crypto.decryptString(inputText, password);
 					} catch (Exception e) {
 						decrypted = "Error";
 						e.printStackTrace();

@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 
 public class Toolbar extends JPanel implements ActionListener {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2544272439906654645L;
 	private JButton encryptBtn;
 	private JButton decryptBtn;
 	
